@@ -131,7 +131,8 @@ class MainPage(Frame):
 
         tv = Treeview(self)
         self.library_treeview = tv
-        tv.grid(row=0, column=0, rowspan=10, columnspan=10, sticky=(N, E, W, S))
+        tv.grid(row=0, column=0, rowspan=10,
+                columnspan=10, sticky=(N, E, W, S))
         tv['columns'] = ('Version', 'Source')
         tv.heading('#0', text="Name")
         tv.heading('Version', text="Version")
@@ -149,7 +150,8 @@ class MainPage(Frame):
 
         # Buttons for the rest
 
-        settings_button = Button(self, text="Settings", command=lambda: controller.show_frame(SettingsPage))
+        settings_button = Button(
+            self, text="Settings", command=lambda: controller.show_frame(SettingsPage))
         settings_button.grid(row=10, column=0, sticky=N + S + E + W)
 
         populate_button = Button(self, text="Load library",
@@ -161,7 +163,8 @@ class MainPage(Frame):
                                     my_lib.install_game(tv.item(tv.focus())['text'])))
         install_button.grid(row=10, column=2, sticky=N + S + E + W)
 
-        duplicates_button = Button(self, text="Find duplicates", command=my_lib.find_duplicates)
+        duplicates_button = Button(
+            self, text="Find duplicates", command=my_lib.find_duplicates)
         duplicates_button.grid(row=10, column=3, sticky=N + S + E + W)
 
         search_entry = Entry(self, text="")
@@ -174,7 +177,8 @@ class MainPage(Frame):
 
         # TODO Make this to look on more different torrents
 
-        torrent_button = Button(self, text="Find on torrents", command=self.torrent_button_on_click)
+        torrent_button = Button(
+            self, text="Find on torrents", command=self.torrent_button_on_click)
         torrent_button.grid(row=10, column=8, sticky=N + S + E + W)
 
         quit_button = Button(self, text="Quit", command=controller.destroy)
@@ -184,15 +188,18 @@ class MainPage(Frame):
     # fill_treeview function to display shit and make the page visible
     def torrent_button_on_click(self):
         torrent_list = my_tpb.get_torrents(self.torrent_search_entry.get())
-        torrent_list += my_FreeGOG.get_torrents(self.torrent_search_entry.get())
+        torrent_list += my_FreeGOG.get_torrents(
+            self.torrent_search_entry.get())
         if len(torrent_list) == 0:
             # There are no torrents
-            tkinter.messagebox.showinfo('No luck', "Sorry, no torrents have been found =(")
+            tkinter.messagebox.showinfo(
+                'No luck', "Sorry, no torrents have been found =(")
         else:
             # Some were found, let's proceed
             self.controller.show_frame(TorrentsPage)
             t_page = self.controller.get_page('TorrentsPage')
-            t_page.torrents_treeview.delete(*t_page.torrents_treeview.get_children())
+            t_page.torrents_treeview.delete(
+                *t_page.torrents_treeview.get_children())
             t_page.current_torrents_list = torrent_list
             temp_list = []
             for i in torrent_list:
@@ -212,7 +219,8 @@ class MainPage(Frame):
                 self.controller.get_page('MultipleInstallPage').temp_tv.delete(
                     *self.controller.get_page('MultipleInstallPage').temp_tv.get_children())
                 for item in list_to_choose_from:
-                    self.controller.get_page('MultipleInstallPage').temp_tv.insert('', 'end', text=item)
+                    self.controller.get_page(
+                        'MultipleInstallPage').temp_tv.insert('', 'end', text=item)
         else:
             # nothing was selected
             return -1
@@ -229,22 +237,24 @@ class MultipleInstallPage(Frame):
             Grid.columnconfigure(self, count, weight=1)
         self.temp_tv = Treeview(self)
         temp_tv = self.temp_tv
-        temp_tv.grid(row=0, column=0, rowspan=3, columnspan=4, sticky=(N, E, W, S))
+        temp_tv.grid(row=0, column=0, rowspan=3,
+                     columnspan=4, sticky=(N, E, W, S))
         temp_tv.heading('#0', text="Choose one:")
         temp_tv.column("#0", minwidth=300)
-    
+
         # adding scrollbar
-    
+
         ysb = Scrollbar(self, orient='vertical', command=temp_tv.yview)
         temp_tv.configure(yscroll=ysb.set)
         ysb.grid(row=0, column=3, rowspan=3, sticky='nse')
-    
+
         # Buttons for the rest
-    
+
         ok_button = Button(self, text="Ok", command=self.ok_button_click)
         ok_button.grid(row=3, column=0, sticky=N + S + E + W)
-    
-        cancel_button = Button(self, text="Cancel", command=lambda: controller.show_frame(MainPage))
+
+        cancel_button = Button(self, text="Cancel",
+                               command=lambda: controller.show_frame(MainPage))
         cancel_button.grid(row=3, column=3, sticky=N + S + E + W)
 
     def ok_button_click(self):
@@ -279,7 +289,8 @@ class SettingsPage(Frame):
         tv.column("#0", anchor='w', minwidth=200)
         tv.column('Source', width=100, minwidth=50)
 
-        paths_label = Label(self, text="PATHS OF YOUR GAME LIBRARY", font=('Fixedsys', 16))
+        paths_label = Label(
+            self, text="PATHS OF YOUR GAME LIBRARY", font=('Fixedsys', 16))
         paths_label.grid(row=0, column=0, columnspan=10, sticky=N + S + E + W)
 
         add_button = Button(self, text="Add", command=None)
@@ -313,7 +324,8 @@ class SettingsPage(Frame):
         save_button = Button(self, text="Save", command=None)
         save_button.grid(row=10, column=8, sticky=N + S + E + W)
 
-        cancel_button = Button(self, text="Cancel", command=lambda: controller.show_frame(MainPage))
+        cancel_button = Button(self, text="Cancel",
+                               command=lambda: controller.show_frame(MainPage))
         cancel_button.grid(row=10, column=9, sticky=N + S + E + W)
 
 
@@ -330,7 +342,8 @@ class TorrentsPage(Frame):
             Grid.columnconfigure(self, count, weight=1)
         self.torrents_treeview = Treeview(self)
         torrents_treeview = self.torrents_treeview
-        torrents_treeview.grid(row=0, column=0, rowspan=3, columnspan=4, sticky=(N, E, W, S))
+        torrents_treeview.grid(row=0, column=0, rowspan=3,
+                               columnspan=4, sticky=(N, E, W, S))
         torrents_treeview.heading('#0', text="Torrent name")
         torrents_treeview.column("#0", minwidth=400)
         torrents_treeview['columns'] = ('size', 'seeders', 'site')
@@ -343,16 +356,19 @@ class TorrentsPage(Frame):
 
         # adding scrollbar
 
-        ysb = Scrollbar(self, orient='vertical', command=torrents_treeview.yview)
+        ysb = Scrollbar(self, orient='vertical',
+                        command=torrents_treeview.yview)
         torrents_treeview.configure(yscroll=ysb.set)
         ysb.grid(row=0, column=3, rowspan=3, sticky='nse')
 
         # Buttons for the rest
 
-        steal_button = Button(self, text="Steal that shit!", command=self.steal_button_click)
+        steal_button = Button(self, text="Steal that shit!",
+                              command=self.steal_button_click)
         steal_button.grid(row=3, column=0, sticky=N + S + E + W)
 
-        cancel_button = Button(self, text="Cancel", command=lambda: controller.show_frame(MainPage))
+        cancel_button = Button(self, text="Cancel",
+                               command=lambda: controller.show_frame(MainPage))
         cancel_button.grid(row=3, column=3, sticky=N + S + E + W)
 
     # Will identify the torrent by it's name and site (hopefully enough?), find it in the current torrents which was
@@ -360,15 +376,18 @@ class TorrentsPage(Frame):
     def steal_button_click(self):
         # probably only should do stuff when something is selected
         if self.torrents_treeview.focus() != '':
-            torrent_name = self.torrents_treeview.item(self.torrents_treeview.focus())['text']
-            torrent_from = self.torrents_treeview.item(self.torrents_treeview.focus())['values'][2]
+            torrent_name = self.torrents_treeview.item(
+                self.torrents_treeview.focus())['text']
+            torrent_from = self.torrents_treeview.item(
+                self.torrents_treeview.focus())['values'][2]
             for torrent in self.current_torrents_list:
                 if torrent.name == torrent_name and torrent.site == torrent_from:
                     torrent.download_torrent()
                     break
             else:
                 # Weird, seems like the torrent couldn't be found. I'll just do a messagebox
-                tkinter.messagebox.showerror('Dafuq', "Something went really wrong in the .steal_button_click, brah =(")
+                tkinter.messagebox.showerror(
+                    'Dafuq', "Something went really wrong in the .steal_button_click, brah =(")
             self.controller.show_frame(MainPage)
         else:
             # nothing selected, just ignore this shit
@@ -452,7 +471,8 @@ class GameLibrary(object):
                 if len(game.installers) == 0:
                     temp_text = "There is no recognized installer type for this game. \n"
                     temp_text += "Do you wish to open the game folder to search for in installer manually?"
-                    answer = tkinter.messagebox.askquestion('Whatchagonnado', temp_text)
+                    answer = tkinter.messagebox.askquestion(
+                        'Whatchagonnado', temp_text)
                     if answer == 'yes':
                         startfile(game.directory)
                     return 0
@@ -464,6 +484,7 @@ class GameLibrary(object):
 
 
 # returns a library as a list of lists
+
 
     def as_list(self):
         lst = []
@@ -478,7 +499,8 @@ class GameLibrary(object):
             if (entry.name[0] != "!") and entry.is_dir():
                 # titles will include [ and ] for distrib_source, we ignore them for title and parse them for source
                 if entry.name.find('[') >= 0:
-                    game_title = remove_extra_spaces_from_string(entry.name[0:entry.name.find('[')])
+                    game_title = remove_extra_spaces_from_string(
+                        entry.name[0:entry.name.find('[')])
                 else:
                     game_title = entry.name
                 folder = entry.path
@@ -492,7 +514,8 @@ class GameLibrary(object):
                         entry.name[entry.name.find('[')+1:entry.name.find(']')])
                 else:
                     distrib_type = "Unknown"
-                new_game = Game(game_title, version, folder, installer, distrib_type)
+                new_game = Game(game_title, version, folder,
+                                installer, distrib_type)
                 self.add_game(new_game)
 
     # populates from all directories in the settings, key = path, value = distrib_source
@@ -515,7 +538,8 @@ class GameLibrary(object):
                 lst_to_populate.append(val.title)
         # display results
         if number_of_duplicates == 0:
-            tkinter.messagebox.showinfo('Results', "No duplicates found in your library!")
+            tkinter.messagebox.showinfo(
+                'Results', "No duplicates found in your library!")
         else:
             temp_text = 'Found %d duplicates in your base:\n' % number_of_duplicates
             for i in lst_to_populate:
@@ -584,7 +608,8 @@ class TPBUser(object):
             temp = temp[temp.find('title="Details for ') + 19:]
             tname = temp[:temp.find("\"")]
             temp = temp[temp.find('<a href="magnet') + 9:]
-            tlink = temp[:temp.find('title="Download this torrent using magnet"')-2]
+            tlink = temp[:temp.find(
+                'title="Download this torrent using magnet"')-2]
             temp = temp[temp.find('class="DetDesc"')+12:]
             temp = temp[temp.find('Size') + 5:]
             tsize = temp[:temp.find(',')]
@@ -595,7 +620,8 @@ class TPBUser(object):
             temp = temp[temp.find('>')+1:]
             tleeches = int(temp[:temp.find('<')])
             tsite = "TPB"
-            temp_torrent = Torrent(tlink, tname, tsize, tseeds, tleeches, tsite)
+            temp_torrent = Torrent(tlink, tname, tsize,
+                                   tseeds, tleeches, tsite)
             # Only add a torrent if there is at least 1 seeder
             if tseeds >= 1:
                 list_of_torrents.append(temp_torrent)
@@ -626,8 +652,10 @@ class TapochekUser(object):
             PASSWORD = self.password
             WTF = '%C2%F5%EE%E4'
             s.get(URL)
-            LOGIN_DATA = dict(login_username=USERNAME, login_password=PASSWORD, login=WTF)
-            s.post(URL, data=LOGIN_DATA, headers={'Referer': 'http: // tapochek.net / index.php'})
+            LOGIN_DATA = dict(login_username=USERNAME,
+                              login_password=PASSWORD, login=WTF)
+            s.post(URL, data=LOGIN_DATA, headers={
+                   'Referer': 'http: // tapochek.net / index.php'})
             self.try_test_url()
         return None
 
@@ -674,9 +702,11 @@ class FreeGOGPCUser(object):
             tsize = temp2[:temp2.find('<')]
             temp2 = temp2[temp2.find('href="magnet:') + 6:]
             tlink2 = temp2[:temp2.find('">')]
-            temp_torrent = Torrent(tlink2, tname, tsize, 999, 999, 'FreeGOGPCGames')
+            temp_torrent = Torrent(tlink2, tname, tsize,
+                                   999, 999, 'FreeGOGPCGames')
             list_of_torrents.append(temp_torrent)
         return list_of_torrents
+
 
 my_tpb = TPBUser()
 my_FreeGOG = FreeGOGPCUser()
