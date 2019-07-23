@@ -5,7 +5,7 @@ from Classes.Torrent import Torrent
 
 
 class TPBUser(object):
-    url = "https://thepiratebay.org"
+    url = "https://thepiratebay.icu"
 
     # 0/99/401 = unknown(relevancy?)/torrents availability?/category(games -> PC)
     def construct_search_url(self, game_name):

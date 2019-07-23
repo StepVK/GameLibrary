@@ -111,8 +111,6 @@ class MainPage(Frame):
             tv, my_lib.find_games_by_name(search_entry.get()).as_list(), 3))
         search_button.grid(row=10, column=7, sticky=N + S + E + W)
 
-        # TODO Make this to look on more different torrents
-
         torrent_button = Button(
             self, text="Find on torrents", command=self.torrent_button_on_click)
         torrent_button.grid(row=10, column=8, sticky=N + S + E + W)
@@ -122,8 +120,10 @@ class MainPage(Frame):
 
     # It will clear the torrent page treeview, upload a new torrent list into current tor list on page, then call the
     # fill_treeview function to display shit and make the page visible
+    # TODO Make this to look on more different torrents
     def torrent_button_on_click(self):
         torrent_list = my_tpb.get_torrents(self.torrent_search_entry.get())
+        # TODO: FreeGOG doesn't seem to work. Check out
         torrent_list += my_FreeGOG.get_torrents(
             self.torrent_search_entry.get())
         if len(torrent_list) == 0:
