@@ -5,8 +5,9 @@ import requests
 class TapochekUser(object):
     url = 'http://tapochek.net/'
     login_url = 'http://tapochek.net/login.php'
-    login = 'Roleplayer'
-    password = 'Id1JdHa1j0W2oVIrhVdi'
+    # TODO: Get login and password from settings and do not sync those to remote repo
+    login = '***'
+    password = '***'
     test_url = 'http://tapochek.net/tracker.php?nm=123#results'
 
     def construct_search_url(self, game_name):
