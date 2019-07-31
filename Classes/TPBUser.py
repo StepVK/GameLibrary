@@ -7,17 +7,17 @@ from Classes.Torrent import Torrent
 class TPBUser(object):
     url = "https://thepiratebay.icu"
 
-    # 0/99/401 = unknown(relevancy?)/torrents availability?/category(games -> PC)
-    def construct_search_url(self, game_name):
-        return "%s/search/%s/0/99/401" % (self.url, game_name)
-
     # Returns a list of torrents from TPB for a game name
     def get_torrents(self, game_name):
         r = requests.get(self.construct_search_url(game_name))
         return self.parse_search_result(r.text)
 
+    # 0/99/401 = unknown(relevancy?)/torrents availability?/category(games -> PC)
+    def __construct_search_url(self, game_name):
+        return "%s/search/%s/0/99/401" % (self.url, game_name)
+
     # This will take a result from a http requests and return a list of torrents (objects)
-    def parse_search_result(self, result):
+    def __parse_search_result(self, result):
         list_of_torrents = []
         # take unnecessary shit in front of torrents
         temp = result
