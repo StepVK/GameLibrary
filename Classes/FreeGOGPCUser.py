@@ -8,7 +8,7 @@ class FreeGOGPCUser(object):
     url = 'http://freegogpcgames.com'
 
     # construct the search url
-    def construct_search_url(self, game_name):
+    def __construct_search_url(self, game_name):
         return "%s/?s=%s" % (self.url, game_name)
 
 #     def test_FreeGOGPC(self, game_name, file_name):
@@ -19,11 +19,7 @@ class FreeGOGPCUser(object):
 #         for i in self.parse_search_result(r.text):
 #             print(i.as_list())
 
-    def get_torrents(self, game_name):
-        r = requests.get(self.construct_search_url(game_name))
-        return self.parse_search_result(r.text)
-
-    def parse_search_result(self, result):
+    def __parse_search_result(self, result):
         temp = result
         list_of_torrents = []
         temp = temp[temp.find('<h1 class'):]
@@ -49,3 +45,7 @@ class FreeGOGPCUser(object):
                                    999, 999, 'FreeGOGPCGames')
             list_of_torrents.append(temp_torrent)
         return list_of_torrents
+
+    def get_torrents(self, game_name):
+        r = requests.get(self.__construct_search_url(game_name))
+        return self.__parse_search_result(r.text)
