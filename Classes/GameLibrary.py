@@ -3,8 +3,7 @@ from os import scandir, startfile
 
 from Classes.Game import Game
 from Classes.Settings import Settings
-from Helpers import (get_installer_paths, launch_installer,
-                     remove_extra_spaces_from_string)
+from Helpers import (get_installer_paths, launch_installer)
 
 
 # TODO When creating multiple gamelibrary objects (for example subset in search) settings get capiplled multiple times. BAD
@@ -52,8 +51,7 @@ class GameLibrary(object):
             if (entry.name[0] != "!") and (entry.name != "System Volume Information") and entry.is_dir():
                 # titles will include [ and ] for distrib_source, we ignore them for title and parse them for source
                 if entry.name.find('[') >= 0:
-                    game_title = remove_extra_spaces_from_string(
-                        entry.name[0:entry.name.find('[')])
+                    game_title = entry.name[0:entry.name.find('[')].strip()
                 else:
                     game_title = entry.name
                 folder = entry.path
@@ -63,8 +61,8 @@ class GameLibrary(object):
                 if distrib_source != 0:
                     distrib_type = distrib_source
                 elif entry.name.find('[') >= 0:
-                    distrib_type = remove_extra_spaces_from_string(
-                        entry.name[entry.name.find('[')+1:entry.name.find(']')])
+                    distrib_type = entry.name[entry.name.find(
+                        '[')+1:entry.name.find(']')].strip()
                 else:
                     distrib_type = "Unknown"
                 new_game = Game(game_title, version, folder,
