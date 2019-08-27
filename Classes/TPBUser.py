@@ -1,5 +1,3 @@
-import html.parser
-
 import requests
 
 from Classes.Torrent import Torrent
