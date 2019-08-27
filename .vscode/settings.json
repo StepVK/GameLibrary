@@ -12,5 +12,9 @@
     "python.testing.unittestEnabled": true,
     "python.testing.pytestArgs": [
         "Tests"
+    ],
+    "cSpell.words": [
+        "Referer",
+        "tapochek"
     ]
 }
