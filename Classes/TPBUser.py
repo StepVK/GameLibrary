@@ -1,6 +1,8 @@
-import requests
-from Classes.Torrent import Torrent
 import html.parser
+
+import requests
+
+from Classes.Torrent import Torrent
 
 # This class will hopefully contain methods to login into sites and get magnet links / torrent files from those
 

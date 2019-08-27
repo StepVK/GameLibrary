@@ -1,14 +1,13 @@
-from Classes.Settings import Settings
-from Classes.Game import Game
 import tkinter
-from os import scandir
-from os import startfile
-from Helpers import launch_installer
-from Helpers import remove_extra_spaces_from_string
-from Helpers import get_installer_paths
+from os import scandir, startfile
+
+from Classes.Game import Game
+from Classes.Settings import Settings
+from Helpers import (get_installer_paths, launch_installer,
+                     remove_extra_spaces_from_string)
+
+
 # TODO When creating multiple gamelibrary objects (for example subset in search) settings get capiplled multiple times. BAD
-
-
 class GameLibrary(object):
     def __init__(self):
         self.library = []
@@ -39,10 +38,7 @@ class GameLibrary(object):
                 else:
                     return game.installers
 
-
-# returns a library as a list of lists
-
-
+    # returns a library as a list of lists
     def as_list(self):
         lst = []
         for i in self.library:

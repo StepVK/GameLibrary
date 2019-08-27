@@ -1,4 +1,5 @@
 import requests
+
 # This class will contain methods to login into tapochek.net and find torrents there
 
 

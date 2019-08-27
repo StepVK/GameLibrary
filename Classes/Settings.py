@@ -1,8 +1,6 @@
-from os import scandir
-from os import getcwd
-from os import path
-from os.path import splitext
 import json
+from os import getcwd, path, scandir
+from os.path import splitext
 
 # Class for storing, loading, saving and displaying settings. Utilizes json module
 

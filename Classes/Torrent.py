@@ -1,5 +1,5 @@
-from Helpers import fix_nbsp
-from Helpers import startfile
+from Helpers import fix_nbsp, startfile
+
 # Will use this class to store torrent objects and maybe something more
 
 

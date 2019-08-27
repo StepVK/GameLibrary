@@ -8,8 +8,7 @@ from Classes.GameLibrary import GameLibrary
 from Classes.TapochekUser import TapochekUser
 from Classes.Torrent import Torrent
 from Classes.TPBUser import TPBUser
-from Helpers import fill_tv_from_list
-from Helpers import launch_installer
+from Helpers import fill_tv_from_list, launch_installer
 
 # Global variables
 

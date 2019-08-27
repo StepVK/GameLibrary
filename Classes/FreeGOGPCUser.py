@@ -1,4 +1,5 @@
 import requests
+
 from Classes.Torrent import Torrent
 
 # This class will hopefully work with freegogpcgames.com
@@ -10,14 +11,6 @@ class FreeGOGPCUser(object):
     # construct the search url
     def __construct_search_url(self, game_name):
         return "%s/?s=%s" % (self.url, game_name)
-
-#     def test_FreeGOGPC(self, game_name, file_name):
-#         r = requests.get(self.construct_search_url(game_name))
-#         print("I ve requested %s" % self.construct_search_url(game_name))
-# #        with open(file_name, 'wb') as file:
-# #           file.write(self.parse_search_result(r.text).encode('utf-8', errors='replace'))
-#         for i in self.parse_search_result(r.text):
-#             print(i.as_list())
 
     def __parse_search_result(self, result):
         temp = result
