@@ -5,6 +5,16 @@ from os.path import splitext
 list_of_valid_installer_types = [".exe", '.iso']
 
 
+# removes extra spaces at the beginning and end of a string
+def remove_extra_spaces_from_string(string):
+    if string[0] == ' ':
+        return remove_extra_spaces_from_string(string[1:])
+    elif string[len(string) - 1] == ' ':
+        return remove_extra_spaces_from_string(string[:len(string) - 1])
+    else:
+        return string
+
+
 def fix_nbsp(string):
     return string[:string.find('&nbsp;')] + ' ' + string[string.find('&nbsp;')+6:]
 
