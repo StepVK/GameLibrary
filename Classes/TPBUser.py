@@ -53,30 +53,6 @@ class TPBUser(object):
                 list_of_torrents.append(temp_torrent)
         return list_of_torrents
 
-    class __TPBResponseParser(html.parser.HTMLParser):
-        __torrents = []
-        __middleOfTorrent = False
-        __currentTorrent = None
-
-        def get_torrents(self):
-            return self.__torrents
-
-        def handle_starttag(self, tag, attrs):
-            print("Start tag:", tag)
-            for attr in attrs:
-                print("     attr:", attr)
-            # if tag == 'div' and ('class', 'detName') in attrs:
-            #    self.__middleOfTorrent = True
-             #   self.current
-             #   print("got something?")
-            pass
-
-    def __parse_search_result2(self, HTMLResult):
-        tpb_parser = self.__TPBResponseParser()
-        tpb_parser.feed(self.__remove_useless_HTML(HTMLResult))
-        return tpb_parser.get_torrents()
-        # Returns a list of torrents from TPB for a game name
-
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))
-        return self.__parse_search_result2(r.text)
+        return self.__parse_search_result(r.text)
