@@ -19,12 +19,6 @@ class TPBUser(object):
     # This will take a result from a http requests and return a list of torrents (objects)
     def __parse_search_result(self, result):
         list_of_torrents = []
-        # take unnecessary shit in front of torrents
-        # temp = result
-        # temp = temp[temp.find('Search results:'):]
-        # temp = temp[temp.find('<td>')+4:]
-        # take unnecessary shit in the end
-        # temp = temp[:temp.find('<div class="ads"')]
         # parse torrents payload
         temp = self.__remove_useless_HTML(result)
         while temp.find('div class="detName"') != -1:
