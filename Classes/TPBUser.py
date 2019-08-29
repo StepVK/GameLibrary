@@ -1,10 +1,10 @@
 import requests
 
+from html.parser import HTMLParser
 from Classes.Torrent import Torrent
 
+
 # This class will hopefully contain methods to login into sites and get magnet links / torrent files from those
-
-
 class TPBUser(object):
     URL = "https://thepiratebay.icu"
 
@@ -45,6 +45,29 @@ class TPBUser(object):
                 list_of_torrents.append(temp_torrent)
         return list_of_torrents
 
+    # Rework of __parse_search_result using html.parser
+    def __parse_search_result_new(self, result):
+        parser = TPBParser()
+        parser.feed(result)
+        return parser.get_torrents()
+
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))
-        return self.__parse_search_result(r.text)
+        return self.__parse_search_result_new(r.text)
+
+
+class TPBParser(HTMLParser):
+    torrents = []
+    currentTorrent = None
+
+    def handle_starttag(self, tag, attrs):
+        print("Encountered a start tag:", tag)
+
+    def handle_endtag(self, tag):
+        print("Encountered an end tag :", tag)
+
+    def handle_data(self, data):
+        print("Encountered some data  :", data)
+
+    def get_torrents(self):
+        return self.torrents
