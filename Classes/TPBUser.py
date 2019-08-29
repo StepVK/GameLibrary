@@ -8,8 +8,8 @@ from Classes.Torrent import Torrent
 # This class will hopefully contain methods to login into sites and get magnet links / torrent files from those
 class TPBUser(object):
     URL = "https://thepiratebay.icu"
-    LINE_REGEX = re.compile(
-        r'.*"Details.*">(?<Name>.*)<\/a.*<a href="(?<Link>.*)" title.*Size (?<Size>.*), UL.*<td align="right">(?<Seeders>\d*)<\/td>.*">(?<Leechers>\d*)<.*')
+    LINE_START = '<div class="detName">'
+    LINE_FINISH = '<td class="vertTh">'
 
     # 0/99/401 = unknown(relevancy?)/torrents availability?/category(games -> PC)
     def __construct_search_url(self, game_name):
@@ -17,7 +17,10 @@ class TPBUser(object):
 
     def __remove_useless_HTML(self, result):
         # take unnecessary shit in front and behind of torrents
-        return result[result.find('Search results:'):result.find('<div class="ads"')]
+        result = result[result.find(
+            'Search results:'): result.find('<div class="ads"')]
+        result = result[result.find(self.LINE_START):]
+        return result
 
     # This will take a result from a http requests and return a list of torrents (objects)
     def __parse_search_result(self, result):
@@ -49,20 +52,23 @@ class TPBUser(object):
         return list_of_torrents
 
     def __parse_search_result_new(self, result):
-        LINE_START = '<div class="detName">'
-        LINE_FINISH = '<td class="vertTh">'
+
         torrentLines = []
         text = self.__remove_useless_HTML(result)
-        while text.find(LINE_START) > -1:
+        while text.find(self.LINE_START) > -1:
             torrentLines.append(
-                text[text.find(LINE_START): text.find(LINE_FINISH)])
-            text = text[LINE_FINISH + len(LINE_FINISH):]
+                text[text.find(self.LINE_START): text.find(self.LINE_FINISH)])
+            text = text[self.LINE_FINISH + len(self.LINE_FINISH):]
         return [self.__convert_HTML_into_torrent(line) for line in torrentLines]
 
     def __convert_HTML_into_torrent(self, line):
-        match = re.match(self.LINE_REGEX, line)
+        match = re.match(
+            r'.*"Details.*">(?<Name>.*)<\/a.*<a href="(?<Link>.*)" title.*Size (?<Size>.*), UL.*<td align="right">(?<Seeders>\d*)<\/td>.*">(?<Leechers>\d*)<.*', line)
         pass
 
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))
-        return self.__parse_search_result_new(r.text)
+        if not r.ok:
+            raise (Exception('HTTP Request failed'))
+        else:
+            return self.__parse_search_result_new(r.text)
