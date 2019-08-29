@@ -5,6 +5,7 @@
         "-s",
         "./Tests",
         "-p",
+        "test*.py",
         "test_*.py"
     ],
     "python.testing.pytestEnabled": false,

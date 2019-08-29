@@ -1,6 +1,7 @@
 import unittest
-from Classes.TPBUser import TPBUser
+
 from Classes.FreeGOGPCUser import FreeGOGPCUser
+from Classes.TPBUser import TPBUser
 
 
 class Test_TPBUser(unittest.TestCase):
