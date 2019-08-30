@@ -52,18 +52,17 @@ class TPBUser(object):
         return list_of_torrents
 
     def __parse_search_result_new(self, result):
-
         torrentLines = []
         text = self.__remove_useless_HTML(result)
         while text.find(self.LINE_START) > -1:
             torrentLines.append(
                 text[text.find(self.LINE_START): text.find(self.LINE_FINISH)])
-            text = text[self.LINE_FINISH + len(self.LINE_FINISH):]
+            text = text[text.find(self.LINE_FINISH) + len(self.LINE_FINISH):]
         return [self.__convert_HTML_into_torrent(line) for line in torrentLines]
 
     def __convert_HTML_into_torrent(self, line):
         match = re.match(
-            r'.*"Details.*">(?<Name>.*)<\/a.*<a href="(?<Link>.*)" title.*Size (?<Size>.*), UL.*<td align="right">(?<Seeders>\d*)<\/td>.*">(?<Leechers>\d*)<.*', line)
+            r'.*"Details.*">(?P<Name>.*)<\/a.*<a href="(?P<Link>.*)" title.*Size (?P<Size>.*), UL.*<td align="right">(?P<Seeders>\d*)<\/td>.*">(?P<Leechers>\d*)<.*', line)
         pass
 
     def get_torrents(self, game_name):
@@ -72,3 +71,7 @@ class TPBUser(object):
             raise (Exception('HTTP Request failed'))
         else:
             return self.__parse_search_result_new(r.text)
+
+    # remove this later
+    def get_torrents_from_string(self, string):
+        return self.__parse_search_result_new(string)
