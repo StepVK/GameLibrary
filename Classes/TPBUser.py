@@ -10,6 +10,7 @@ class TPBUser(object):
     URL = "https://thepiratebay.icu"
     LINE_START = '<div class="detName">'
     LINE_FINISH = '<td class="vertTh">'
+    PAYLOAD_FINISH = '</tbody></table>'
 
     # 0/99/401 = unknown(relevancy?)/torrents availability?/category(games -> PC)
     def __construct_search_url(self, game_name):
@@ -20,6 +21,7 @@ class TPBUser(object):
         result = result[result.find(
             'Search results:'): result.find('<div class="ads"')]
         result = result[result.find(self.LINE_START):]
+        result = result[:result.find(self.PAYLOAD_FINISH)]
         return result
 
     # This will take a result from a http requests and return a list of torrents (objects)
@@ -62,8 +64,11 @@ class TPBUser(object):
 
     def __convert_HTML_into_torrent(self, line):
         match = re.match(
-            r'.*"Details.*">(?P<Name>.*)<\/a.*<a href="(?P<Link>.*)" title.*Size (?P<Size>.*), UL.*<td align="right">(?P<Seeders>\d*)<\/td>.*">(?P<Leechers>\d*)<.*', line)
-        pass
+            r'.*"Details for .*">(?P<Name>.*)<\/a.*href="(?P<Link>magnet:.*)" title="Down.*Size (?P<Size>.*), UL.*<td align="right">(?P<Seeders>\d*)<\/td>.*">(?P<Leechers>\d*)<.*', line)
+        if match is None:
+            raise (ValueError('Line cannot be parsed to get a torrent: %s' % line))
+        tempDict = match.groupdict()
+        return Torrent(link=tempDict['Link'], name=tempDict['Name'], size=tempDict['Size'], seeds=tempDict['Seeders'], leechers=tempDict['Leechers'])
 
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))

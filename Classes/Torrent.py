@@ -4,13 +4,35 @@ from Helpers import fix_nbsp, startfile
 
 
 class Torrent(object):
-    def __init__(self, link, name, size, seeds, leeches, site):
+    def __init__(self, link=None, name=None, size=None, seeds=None, leechers=None, site=None):
         self.link = link
         self.name = name
         self.size = size
+        if not isinstance(seeds, int):
+            seeds = int(seeds)
         self.seeds = seeds
-        self.leeches = leeches
+        if not isinstance(leechers, int):
+            leechers = int(leechers)
+        self.leechers = leechers
         self.site = site
+
+    def update_data(self, link=None, name=None, size=None, seeds=None, leechers=None, site=None):
+        if link is not None:
+            self.link = link
+        if name is not None:
+            self.name = name
+        if size is not None:
+            self.size = size
+        if seeds is not None:
+            if not isinstance(seeds, int):
+                seeds = int(seeds)
+            self.seeds = seeds
+        if leechers is not None:
+            if not isinstance(leechers, int):
+                leechers = int(leechers)
+            self.leechers = leechers
+        if site is not None:
+            self.site = site
 
     def as_list(self):
         return [self.link, self.name, self.size, self.seeds, self.leeches, self.site]
@@ -20,3 +42,6 @@ class Torrent(object):
 
     def download_torrent(self):
         startfile(self.link)
+
+    def __str__(self):
+        return("Torrent: Name = %s, Link = %s(%s), Size = %s, Peers = %d/%d" % (self.name, self.link, self.site, self.size, self.seeds, self.leechers))
