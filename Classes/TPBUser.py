@@ -77,8 +77,8 @@ class TPBUser(object):
         if not r.ok:
             raise (Exception('HTTP Request failed with code %d' % r.status_code))
         else:
-            return self.__parse_search_result_new(r.text)
+            return self.__parse_search_result(r.text)
 
     # remove this later
     def get_torrents_from_string(self, string):
-        return self.__parse_search_result(string)
+        return self.__parse_search_result_new(string)
