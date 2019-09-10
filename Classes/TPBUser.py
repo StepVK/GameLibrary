@@ -18,11 +18,12 @@ class TPBUser(object):
 
     def __remove_useless_HTML(self, result):
         # take unnecessary shit in front and behind of torrents
-        result = result[result.find(
-            'Search results:'): result.find('<div class="ads"')]
-        result = result[result.find(self.LINE_START):]
-        result = result[:result.find(self.PAYLOAD_FINISH)]
-        return result
+        text = ''.join([line.strip() for line in result.split('\n')])
+        text = text[text.find(
+            'Search results:'): text.find('<div class="ads"')]
+        text = text[text.find(self.LINE_START):]
+        text = text[:text.find(self.PAYLOAD_FINISH)]
+        return text
 
     # This will take a result from a http requests and return a list of torrents (objects)
     def __parse_search_result(self, result):
@@ -53,6 +54,7 @@ class TPBUser(object):
                 list_of_torrents.append(temp_torrent)
         return list_of_torrents
 
+    # TODO Make this actually work better than old one and use it
     def __parse_search_result_new(self, result):
         torrentLines = []
         text = self.__remove_useless_HTML(result)
@@ -73,10 +75,10 @@ class TPBUser(object):
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))
         if not r.ok:
-            raise (Exception('HTTP Request failed'))
+            raise (Exception('HTTP Request failed with code %d' % r.status_code))
         else:
             return self.__parse_search_result_new(r.text)
 
     # remove this later
     def get_torrents_from_string(self, string):
-        return self.__parse_search_result_new(string)
+        return self.__parse_search_result(string)
