@@ -1,15 +1,25 @@
 import requests
+from Classes.Settings import Settings
 
 # This class will contain methods to login into tapochek.net and find torrents there
 
 
 class TapochekUser(object):
-    url = 'http://tapochek.net/'
+    URL = 'http://tapochek.net/'
     login_url = 'http://tapochek.net/login.php'
-    # TODO: Get login and password from settings and do not sync those to remote repo
-    login = '***'
-    password = '***'
+    USERNAME = ''
+    PASSWORD = ''
     test_url = 'http://tapochek.net/tracker.php?nm=123#results'
+    SETTINGS_FILE_NAME = 'LoginInfo.json'
+
+    # This reads all settings and is pretty ugly. Make better.
+    def __init__(self, *args, **kwargs):
+        settings = Settings()
+        settings.load_from_folder()
+        loginInfo = settings.body[settings.headers.index('LoginInfo')]
+        self.USERNAME = loginInfo['Tapochek.net Login']
+        self.PASSWORD = loginInfo['Tapochek.net Password']
+        super().__init__(*args, **kwargs)
 
     def construct_search_url(self, game_name):
         pass
