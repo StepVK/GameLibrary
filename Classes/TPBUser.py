@@ -70,7 +70,7 @@ class TPBUser(object):
         if match is None:
             raise (ValueError('Line cannot be parsed to get a torrent: %s' % line))
         tempDict = match.groupdict()
-        return Torrent(link=tempDict['Link'], name=tempDict['Name'], size=tempDict['Size'], seeds=tempDict['Seeders'], leechers=tempDict['Leechers'])
+        return Torrent(link=tempDict['Link'], name=tempDict['Name'], size=tempDict['Size'], seeders=tempDict['Seeders'], leechers=tempDict['Leechers'])
 
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))

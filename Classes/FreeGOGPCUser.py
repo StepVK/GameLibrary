@@ -6,15 +6,16 @@ from Classes.Torrent import Torrent
 
 
 class FreeGOGPCUser(object):
-    url = 'http://freegogpcgames.com'
+    BASE_URL = 'http://freegogpcgames.com'
 
     # construct the search url
     def __construct_search_url(self, game_name):
-        return "%s/?s=%s" % (self.url, game_name)
+        return "%s/?s=%s" % (self.BASE_URL, game_name)
 
+    # TODO Make this look not awful
     def __parse_search_result(self, result):
         temp = result
-        list_of_torrents = []
+        torrents = []
         temp = temp[temp.find('<h1 class'):]
         temp = temp[:temp.find("class='page-numbers current'>")]
         # Parse payload. Not torrents yet.
@@ -34,10 +35,9 @@ class FreeGOGPCUser(object):
             tsize = temp2[:temp2.find('<')]
             temp2 = temp2[temp2.find('href="magnet:') + 6:]
             tlink2 = temp2[:temp2.find('">')]
-            temp_torrent = Torrent(tlink2, tname, tsize,
-                                   999, 999, 'FreeGOGPCGames')
-            list_of_torrents.append(temp_torrent)
-        return list_of_torrents
+            torrents.append(Torrent(link=tlink2, name=tname,
+                                    size=tsize, site='FreeGOGPCGames'))
+        return torrents
 
     def get_torrents(self, game_name):
         r = requests.get(self.__construct_search_url(game_name))
