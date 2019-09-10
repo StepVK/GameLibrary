@@ -8,7 +8,6 @@ from Classes.TapochekUser import TapochekUser
 class Test_TPBUser(unittest.TestCase):
     def setUp(self):
         self.tpbUser = TPBUser()
-        return super().setUp()
 
     def test_canGetTorrensForWar(self):
         assert(len(self.tpbUser.get_torrents('war')) > 0)
@@ -20,7 +19,12 @@ class Test_FreeGOGPCUser(unittest.TestCase):
 
 
 class Test_TapochekUser(unittest.TestCase):
+    def SetUp(self):
+        self.tap = TapochekUser()
+
     def test_canGetLoginInfo(self):
-        tap = TapochekUser()
-        assert(tap.USERNAME != '')
-        assert(tap.PASSWORD != '')
+        assert(self.tap.USERNAME != '')
+        assert(self.tap.PASSWORD != '')
+
+    def test_canAccessSearch(self):
+        self.tap.try_login()
