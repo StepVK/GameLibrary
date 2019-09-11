@@ -6,11 +6,12 @@ from Classes.Settings import Settings
 
 class TapochekUser(object):
     URL = 'http://tapochek.net/'
-    LOGIN_URL = 'http://tapochek.net/login.php'
+    LOGIN_URL = 'https://tapochek.net/login.php'
     USERNAME = ''
     PASSWORD = ''
-    test_url = 'http://tapochek.net/tracker.php?nm=123#results'
+    test_url = 'http://tapochek.net/tracker.php?nm=123'
     SETTINGS_FILE_NAME = 'LoginInfo.json'
+    current_session = None
 
     # This reads all settings and is pretty ugly. Make better.
     def __init__(self, *args, **kwargs):
@@ -21,21 +22,15 @@ class TapochekUser(object):
         self.PASSWORD = loginInfo['Tapochek.net Password']
         super().__init__(*args, **kwargs)
 
-    def construct_search_url(self, game_name):
+    def construct_search_url(self, keywords, category=None):
         pass
 
     # Will return cookie for session or None if login failed
     def try_login(self):
-        with requests.session() as s:
-            # WTF = '%C2%F5%EE%E4'
-            # s.get(URL)
-            # LOGIN_DATA = dict(login_username=USERNAME,
-            #                   login_password=PASSWORD, login=WTF)
-            # s.post(LOGIN_URL, data=LOGIN_DATA, headers={
-            #        'Referer': 'http: // tapochek.net / index.php'})
-            payload = {'login_username': self.USERNAME,
-                       'login_password': self.PASSWORD}
-            r = s.post(self.LOGIN_URL, data=payload)
-            r = s.get(self.test_url)
-            r = s.get(self.test_url)
-        return None
+        self.current_session = requests.session()
+        payload = {'login_username': self.USERNAME,
+                   'login_password': self.PASSWORD,
+                   'login': '%C2%F5%EE%E4'
+                   }
+        response = self.current_session.post(self.LOGIN_URL, data=payload)
+        return response.ok
